@@ -21,13 +21,13 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                	app = docker.build("tiff19/frontend-rigup")
+                	app = docker.build("hisbu/frontend-rigup")
                 }
             }
         }
         stage('Test docker image') {
             steps {
-                sh 'docker run -d --rm --name testImages2 -p 8085:80 tiff19/frontend-rigup'
+                sh 'docker run -d --rm --name testImages2 -p 8085:80 hisbu/frontend-rigup'
                 // input message: "Finished test image? (Click proceed to continue)"
             }
         }
@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Clean up image') {
             steps {
-                sh 'docker rmi tiff19/frontend-rigup'
+                sh 'docker rmi hisbu/frontend-rigup'
 
             }
         }
@@ -56,9 +56,9 @@ pipeline {
             steps {
                 sh 'chmod +x changeTag.sh'
                 sh "./changeTag.sh ${DOCKER_TAG}"
-                sshagent(['kubeAccess']) {
-                    sh "scp -o StrictHostKeyChecking=no frontend-config-k8s.yml tiffany@34.101.239.207:/home/tiffany/"
-                    sh "ssh tiffany@34.101.239.207 sudo kubectl apply -f ."
+                sshagent(['sshkey']) {
+                    sh "scp -o StrictHostKeyChecking=no frontend-config-k8s.yml hisbu@35.198.224.116:/home/hisbu/"
+                    sh "ssh hisbu@35.198.224.116 sudo kubectl apply -f ."
                 }
             }
         }
