@@ -20,7 +20,7 @@ spec:
     spec: 
       containers:
         - name: frontend-server
-          image: hisbu/rigup
+          image: hisbu/frontend-rigup:tagVersion
           ports:
             - containerPort: 80
 
